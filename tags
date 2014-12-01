@@ -1,0 +1,29 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+close_mysql	alarm.lua	/^function close_mysql()$/;"	f
+close_mysql	operate.lua	/^function close_mysql()$/;"	f
+close_redis	alarm.lua	/^function close_redis()$/;"	f
+close_redis	operate.lua	/^function close_redis()$/;"	f
+close_redis	redis.lua	/^function close_redis()$/;"	f
+error_res	redis.lua	/^function error_res(err_code)	$/;"	f
+incrby_alarm	alarm.lua	/^function incrby_alarm()$/;"	f
+incrby_opearte	operate.lua	/^function incrby_opearte()$/;"	f
+init_mysql	alarm.lua	/^function init_mysql()$/;"	f
+init_mysql	operate.lua	/^function init_mysql()$/;"	f
+init_redis	alarm.lua	/^function init_redis()$/;"	f
+init_redis	operate.lua	/^function init_redis()$/;"	f
+init_redis	redis.lua	/^function init_redis()$/;"	f
+main	alarm.lua	/^function main()$/;"	f
+main	operate.lua	/^function main()$/;"	f
+main	redis.lua	/^function main()$/;"	f
+parse_postargs	redis.lua	/^function parse_postargs()$/;"	f
+query_all	alarm.lua	/^function query_all()$/;"	f
+query_all	operate.lua	/^function query_all()$/;"	f
+query_top	redis.lua	/^function query_top(key)$/;"	f
+update_alarm	alarm.lua	/^function update_alarm()$/;"	f
+update_alarm	operate.lua	/^function update_alarm()$/;"	f
+update_top	redis.lua	/^function update_top(key, id, score)$/;"	f
