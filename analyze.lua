@@ -22,14 +22,12 @@ http {
 		server 192.168.1.120:8090 weight=2;
 	}
 	server {
-		root /home/lingban/analze/nginx_analyze;
 		listen 8080;
         location /query_top{
 			content_by_lua_file "nginx_analyze/service.lua";
 		}
     }
 	server {
-		root /home/lingban/analze/nginx_analyze;
 		listen 8090;
 		location /alarm{
 			content_by_lua_file "nginx_analyze/alarm.lua";

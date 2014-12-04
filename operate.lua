@@ -107,62 +107,62 @@ function update_alarm()
 end
 
 function incrby_operate()
-	if (string.len(result.inCallType) == 0) or (string.len(result.incallTime) == 0) or (string.len(result.operateType) == 0) or (string.len(result.area) == 0) or (string.len(result.status) == 0) or (string.len(result.failType) == 0 or (string.len(result.sex)) == 0 or string.len(result.age) == 0) then
-		ngx.say("operate is NULL")
-		return
-	end
+	
+	--截取时间
 	local day = string.sub(result.incallTime, 0, 8)
 	local month = string.sub(result.incallTime, 0, 6)
-
 	local hour = string.sub(result.incallTime, 9, 10)
 
+	--切换数据库
+	res,err = red:select(1)
+
 	--所有业务统计
-	res,err = red:hincrby("operate:day", day, 1)
-	res,err = red:hincrby("operate:month", month, 1)
+	res,err = red:hincrby("operateA:day", day, 1)
+	res,err = red:hincrby("operateA:month", month, 1)
 
 	--业务类型分布统计
-	res,err = red:hincrby(string.format("%s:day", result.inCallType), day, 1)
-	res,err = red:hincrby(string.format("%s:month", result.inCallType), month, 1)
+	res,err = red:hincrby(string.format("operateB:%s:day", result.inCallType), day, 1)
+	res,err = red:hincrby(string.format("operateB:%s:month", result.inCallType), month, 1)
 	--操作类型统计
-	res,err = red:hincrby(string.format("%s:day", result.operateType), day, 1)
-	res,err = red:hincrby(string.format("%s:month", result.operateType), month, 1)
+	res,err = red:hincrby(string.format("operateC:%s:day", result.operateType), day, 1)
+	res,err = red:hincrby(string.format("operateC:%s:month", result.operateType), month, 1)
 	--业务类型和操作类型统计
-	res,err = red:hincrby(string.format("%s:%s:day", result.inCallType, result.operateType), day, 1)
-	res,err = red:hincrby(string.format("%s:%s:month", result.inCallType, result.operateType), month, 1)
+	res,err = red:hincrby(string.format("operateD:%s:%s:day", result.inCallType, result.operateType), day, 1)
+	res,err = red:hincrby(string.format("operateD:%s:%s:month", result.inCallType, result.operateType), month, 1)
 	--来电时段统计
-	res,err = red:hincrby(string.format("%s:day", hour), day, 1)
-	res,err = red:hincrby(string.format("%s:month", hour), month, 1)
+	res,err = red:hincrby(string.format("operateE:%s:day", hour), day, 1)
+	res,err = red:hincrby(string.format("operateE:%s:month", hour), month, 1)
 	--来电地域统计
-	res,err = red:hincrby(string.format("%s:%s:day", result.area, result.inCallType), day, 1)
-	res,err = red:hincrby(string.format("%s:%s:month", result.area, result.inCallType), month, 1)
+	res,err = red:hincrby(string.format("operateF:%s:%s:day", result.area, result.inCallType), day, 1)
+	res,err = red:hincrby(string.format("operateF:%s:%s:month", result.area, result.inCallType), month, 1)
 	--办理失败统计
 	if (result.status == 0) then
 		--失败原因分布统计
-		res,err = red:hincrby(string.format("%s:day", result.failType), day, 1)
-		res,err = red:hincrby(string.format("%s:month", result.failType), month, 1)
+		res,err = red:hincrby(string.format("operateG:%s:day", result.failType), day, 1)
+		res,err = red:hincrby(string.format("operateG:%s:month", result.failType), month, 1)
 		--业务类型失败统计
-		res,err = red:hincrby(string.format("%s:day", result.inCallType), day, 1)
-		res,err = red:hincrby(string.format("%s:month", result.inCallType), month, 1)
+		res,err = red:hincrby(string.format("operateH:%s:day", result.inCallType), day, 1)
+		res,err = red:hincrby(string.format("operateH:%s:month", result.inCallType), month, 1)
 	end
 	--业务来电性别统计
-	res,err = red:hincrby(string.format("%s:%s:day", result.sex, result.inCallType), day, 1)
-	res,err = red:hincrby(string.format("%s:%s:month", result.sex, result.inCallType), month, 1)
+	res,err = red:hincrby(string.format("operateI:%s:%s:day", result.sex, result.inCallType), day, 1)
+	res,err = red:hincrby(string.format("operateI:%s:%s:month", result.sex, result.inCallType), month, 1)
 	--业务来电年龄统计
 	if (result.age <20) then
-		res,err = red:hincrby(string.format("0~20:%s:day", result.inCallType), day, 1)
-		res,err = red:hincrby(string.format("0~20:%s:month", result.inCallType), month, 1)
+		res,err = red:hincrby(string.format("operateJ:0~20:%s:day", result.inCallType), day, 1)
+		res,err = red:hincrby(string.format("operateJ:0~20:%s:month", result.inCallType), month, 1)
 	elseif (result.age>=20 and result.age<30) then
-		res,err = red:hincrby(string.format("20~30:%s:day", result.inCallType), day, 1)
-		res,err = red:hincrby(string.format("20~30:%s:month", result.inCallType), month, 1)
+		res,err = red:hincrby(string.format("operateK:20~30:%s:day", result.inCallType), day, 1)
+		res,err = red:hincrby(string.format("operateK:20~30:%s:month", result.inCallType), month, 1)
 	elseif (result.age>=30 and result.age<40) then
-		res,err = red:hincrby(string.format("30~40:%s:day", result.inCallType), day, 1)
-		res,err = red:hincrby(string.format("30~40:%s:month", result.inCallType), month, 1)
+		res,err = red:hincrby(string.format("operateL:30~40:%s:day", result.inCallType), day, 1)
+		res,err = red:hincrby(string.format("operateL:30~40:%s:month", result.inCallType), month, 1)
 	elseif (result.age>=40 and result.age<50) then
-		res,err = red:hincrby(string.format("40~50:%s:day", result.inCallType), day, 1)
-		res,err = red:hincrby(string.format("40~50:%s:month", result.inCallType), month, 1)
-	else (result.age>=50) then
-		res,err = red:hincrby(string.format("50~:%s:day", result.inCallType), day, 1)
-		res,err = red:hincrby(string.format("50~:%s:month", result.inCallType), month, 1)
+		res,err = red:hincrby(string.format("operateM:40~50:%s:day", result.inCallType), day, 1)
+		res,err = red:hincrby(string.format("operateM:40~50:%s:month", result.inCallType), month, 1)
+	elseif (result.age>=50) then
+		res,err = red:hincrby(string.format("operateN:50~:%s:day", result.inCallType), day, 1)
+		res,err = red:hincrby(string.format("operateN:50~:%s:month", result.inCallType), month, 1)
 	end
 
 	close_redis()
@@ -178,15 +178,21 @@ function main()
 	local data = ngx.req.get_body_data()
 	if not data then ngx.say("post data is nil") end
 
-	local json_str = '{"inCallType":1,"incallTime":"201412011055", "operateType":2, "area":3, "status":1, "failType":2, "sex":1, "age":24}'
-	result = cjson.decode(json_str)
+	--local json_str = '{"inCallType":1,"incallTime":"201412011055", "operateType":2, "area":3, "status":1, "failType":2, "sex":1, "age":24}'
+	result = cjson.decode(data)
 	if not result then 
 		ngx.say("json parse err") 
 		return 
 	end
 
+	--判断如果参数为nil或者""返回错误
 	if not result.inCallType or not result.incallTime or not result.operateType or not result.area or not result.status or not result.failType or not result.sex or not result.age then
 		ngx.say("operate nil")
+		return
+	end
+
+	if (result.inCallType == "") or (result.incallTime == "") or (result.operateType == "") or (result.area == "") or (result.status == "") or (result.failType == "") or (result.sex == "") or (result.age == "") then
+		ngx.say("operate result is nil")
 		return
 	end
 
